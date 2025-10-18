@@ -3,10 +3,11 @@
 ## 📊 Dashboard Previews
 
 ### Credit Card Customer Report
-![Credit Card Customer Report](screenshots/dashboard_customer_report.png)
+![Credit Card Customer Report](Screenshot%202025-10-18%20204656.png)
 
 ### Credit Card Transaction Report
-![Credit Card Transaction Report](screenshots/dashboard_transaction_report.png)
+![Credit Card Transaction Report](Screenshot%202025-10-18%20204714.png)
+
 
 
 **Short description**
