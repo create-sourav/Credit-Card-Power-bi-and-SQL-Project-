@@ -110,12 +110,13 @@ Key sections shown in the screenshots:
 
 ## Recommended SQL structure (example)
 
-Create two simple tables to match the model above: `customers` and `transactions`. Add a `dim_date` table (you can generate this in SQL or in Power Query).
+Create two simple tables to match the model above: `customers` and `transactions`. Add a `dim_date` table (you can generate this in MySQL).
 
 Example (very simplified):
 
-```sql
--- 1. Create cc_detail table
+```Mysql
+CREATE DATABASE creditcard_db;
+
 use creditcard_db;
 DROP TABLE IF EXISTS customer_detail;
 drop table if exists creditcard_detail;
@@ -141,7 +142,7 @@ CREATE TABLE creditcard_detail (
 );
 
 
--- 2. Create cc_detail table
+
 
 CREATE TABLE customer_detail (
     Client_Num INT,
@@ -160,6 +161,26 @@ CREATE TABLE customer_detail (
     Income INT,
     Cust_Satisfaction_Score INT
 );
+
+USE creditcard_db;
+
+
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/cc_add.csv'
+INTO TABLE creditcard_detail
+FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n' IGNORE 1 LINES
+(Client_Num, Card_Category, Annual_Fees, Activation_30_Days, Customer_Acq_Cost, @d, Week_Num, Qtr, current_year, Credit_Limit, Total_Revolving_Bal, Total_Trans_Amt, Total_Trans_Ct, Avg_Utilization_Ratio, Use_Chip, Exp_Type, Interest_Earned, Delinquent_Acc)
+SET Week_Start_Date = STR_TO_DATE(@d, '%d-%m-%Y');
+
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/cust_add.csv'
+INTO TABLE customer_detail
+FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 LINES;
+
+select * from customer_detail;
+select *from creditcard_detail;
+
 ```
 
 Place actual load scripts in the `/sql` file.
