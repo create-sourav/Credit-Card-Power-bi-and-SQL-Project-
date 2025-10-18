@@ -1,0 +1,188 @@
+# Credit Card Analytics — Power BI + SQL
+
+## 📊 Dashboard Previews
+
+### Credit Card Customer Report
+![Credit Card Customer Report](screenshots/dashboard_customer_report.png)
+
+### Credit Card Transaction Report
+![Credit Card Transaction Report](screenshots/dashboard_transaction_report.png)
+
+
+**Short description**
+
+This repository contains a Power BI report (`.pbix`) and supporting artifacts for a Credit Card Analytics project. The report analyzes transaction- and customer-level data to surface revenue, interest earned, transaction counts, and behavioral/segment insights (by card category, income group, age group, state, job, education, and transaction type).
+
+> The included Power BI file is `credit card project sql+power bi.pbix` and there are two dashboard screenshots in the repo (used below in the README).
+
+---
+
+## Contents of this repository
+
+* `credit card project sql+power bi.pbix` — Power BI Desktop report file (primary deliverable).
+* `README.md` — This file.
+* `screenshots/` — Folder that should contain the dashboard screenshots (place the two `.png` screenshots here). Reference them in the README so they appear on GitHub.
+* `sql/` — (Recommended) SQL scripts to create tables and load sample data. **Add your own** `create_tables.sql` and `load_data.sql` here.
+* `data/` — (Optional) Sample CSVs if you prefer local refresh instead of SQL connections.
+
+---
+
+## Project overview & objectives
+
+The report was built to help business stakeholders and analysts answer questions such as:
+
+* What is total revenue, interest earned, and transaction volume by quarter?
+* Which card categories (Blue/Silver/Gold/Platinum) and customer segments drive revenue?
+* How does revenue vary by age group, income group, job type, education, and state?
+* Which transaction channels (Swipe / Chip / Online) drive the most revenue?
+
+The visual design prioritizes a single-page executive dashboard with supporting visualizations for segmentation analysis and trend analysis.
+
+---
+
+## Data model (high-level)
+
+This project uses a star-schema style layout. Typical tables expected:
+
+**Fact table**
+
+* `transactions` (or `fact_transactions`) — one row per transaction (Transaction_ID, Customer_ID, Date, Amount, Revenue, Interest_Earned, Card_Category, Use_Type (Swipe/Chip/Online), Expenditure_Type, etc.)
+
+**Dimension tables**
+
+* `customers` — (Customer_ID, Name, Gender, Age, AgeGroup, Income, IncomeGroup, Job, Education, State, Dependents, MaritalStatus)
+* `card` — (Card_ID, Card_Category, Tier, Issue_Date)
+* `dim_date` — standard date dimension (Date, Year, Quarter, Month, Week_Start_Date)
+
+If you do not have separate dimension tables in SQL, Power BI's model can still work when using a single table with appropriate calculated columns.
+
+---
+
+## Key measures (DAX examples)
+
+Below are the core measures included in the report — you can paste these into your PBIX if you recreate the model:
+
+```dax
+Total Revenue = SUM('transactions'[Revenue])
+Total Interest Earned = SUM('transactions'[Interest_Earned])
+Total Amount = SUM('transactions'[Amount])
+Transaction Count = COUNTROWS('transactions')
+
+Current Week Revenue =
+CALCULATE(
+    [Total Revenue],
+    'dim_date'[Week_Start_Date] = MAX('dim_date'[Week_Start_Date])
+)
+
+Previous Week Revenue =
+CALCULATE(
+    [Total Revenue],
+    'dim_date'[Week_Start_Date] = MAX('dim_date'[Week_Start_Date]) - 7
+)
+
+Week Over Week % = DIVIDE([Current Week Revenue] - [Previous Week Revenue], [Previous Week Revenue])
+```
+
+Adjust field and table names to match your model.
+
+---
+
+## Visuals and Layout (what's on the dashboard)
+
+Key sections shown in the screenshots:
+
+* Top KPI cards: Income, Interest, Revenue, Count/Amount
+* Time selector (Week_Start_Date) and quarter/quarter tiles
+* Trend chart: Revenue over time by month/day and by gender
+* Bar charts: Revenue by Age Group, Income Group, Top States, Dependents, Education, Job
+* Table: QTR revenue and total transaction count by Card_Category (and other metrics)
+* Clustered bars for Revenue by Use_Type and Revenue by Expenditure
+
+(Refer to screenshot files in `/screenshots` for the exact layout.)
+
+---
+
+## How to run / open the report
+
+1. **Prerequisites**
+
+   * Power BI Desktop (latest stable release recommended).
+   * Access to the SQL Server (or SQL-compatible) data source if the PBIX is configured for DirectQuery or live connection.
+
+2. **Open file**
+
+   * Download `credit card project sql+power bi.pbix` and open it in Power BI Desktop.
+
+3. **Update data source**
+
+   * In Power BI Desktop: `Home` → `Transform data` → `Data source settings` → `Change Source...` to update the connection string to your SQL Server (or point to local CSV files).
+   * For SQL Server: typical connection string parameters are `Server=YOUR_SERVER_NAME; Database=YOUR_DB; Trusted_Connection=True` (or use SQL auth user/password form in Power BI UI).
+
+4. **Refresh data**
+
+   * After updating the connection, click `Refresh` to pull data.
+   * If credentials are needed, Power BI will prompt — supply appropriate authentication.
+
+---
+
+## Recommended SQL structure (example)
+
+Create two simple tables to match the model above: `customers` and `transactions`. Add a `dim_date` table (you can generate this in SQL or in Power Query).
+
+Example (very simplified):
+
+```sql
+CREATE TABLE customers (
+  Customer_ID INT PRIMARY KEY,
+  Gender CHAR(1),
+  Age INT,
+  Income FLOAT,
+  Job VARCHAR(100),
+  Education VARCHAR(100),
+  State VARCHAR(50),
+  Dependents INT
+);
+
+CREATE TABLE transactions (
+  Transaction_ID BIGINT PRIMARY KEY,
+  Customer_ID INT,
+  Transaction_Date DATE,
+  Amount FLOAT,
+  Revenue FLOAT,
+  Interest_Earned FLOAT,
+  Card_Category VARCHAR(50),
+  Use_Type VARCHAR(50),
+  Expenditure_Type VARCHAR(100),
+  FOREIGN KEY (Customer_ID) REFERENCES customers(Customer_ID)
+);
+```
+
+Place actual load scripts in the `/sql` folder.
+
+---
+
+## Publish to Power BI Service (optional)
+
+1. Save the PBIX.
+2. `Home` → `Publish` and sign into your Power BI tenant.
+3. Choose a workspace and publish. Configure scheduled refresh if you want automated updates (you'll need a gateway for on-prem SQL).
+
+---
+
+## What to include in this GitHub repo (recommended)
+
+* `credit card project sql+power bi.pbix` (the PBIX) — **required** for sharing the report.
+* `sql/create_tables.sql` — table creation scripts.
+* `sql/load_sample_data.sql` — scripts to load sample data (or point to CSVs in `/data`).
+* `screenshots/` — two dashboard screenshots. Put them in `/screenshots` and reference as `screenshots/dashboard1.png` to make them visible in README.
+* `LICENSE` — choose an appropriate license (MIT recommended for open-source analytics projects) and add it.
+
+---
+
+## Tips & troubleshooting
+
+* If visuals show blanks after opening the PBIX, update the data source and refresh.
+* If you use an on-prem SQL Server and plan to publish, configure an Enterprise Gateway for scheduled refresh.
+* Keep column / table names consistent between SQL and Power BI or update DAX measures accordingly.
+
+ the data to be stored as CSV or in a database.
