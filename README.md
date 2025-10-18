@@ -41,24 +41,6 @@ The visual design prioritizes a single-page executive dashboard with supporting 
 
 ---
 
-## Data model (high-level)
-
-This project uses a star-schema style layout. Typical tables expected:
-
-**Fact table**
-
-* `transactions` (or `fact_transactions`) — one row per transaction (Transaction_ID, Customer_ID, Date, Amount, Revenue, Interest_Earned, Card_Category, Use_Type (Swipe/Chip/Online), Expenditure_Type, etc.)
-
-**Dimension tables**
-
-* `customers` — (Customer_ID, Name, Gender, Age, AgeGroup, Income, IncomeGroup, Job, Education, State, Dependents, MaritalStatus)
-* `card` — (Card_ID, Card_Category, Tier, Issue_Date)
-* `dim_date` — standard date dimension (Date, Year, Quarter, Month, Week_Start_Date)
-
-If you do not have separate dimension tables in SQL, Power BI's model can still work when using a single table with appropriate calculated columns.
-
----
-
 ## Key measures (DAX examples)
 
 Below are the core measures included in the report — you can paste these into your PBIX if you recreate the model:
