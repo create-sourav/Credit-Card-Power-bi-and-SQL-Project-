@@ -1,10 +1,10 @@
 
 -- 0. Create a database 
 CREATE DATABASE creditcard_db;
--- 1. Create cc_detail table
+-- 1. Create creditcard_detail table
 use creditcard_db;
 DROP TABLE IF EXISTS customer_detail;
-drop table if exists creditcard_detail;
+DROP TABLE IF EXISTS creditcard_detail;
 CREATE TABLE creditcard_detail (
     Client_Num INT,
     Card_Category VARCHAR(20),
@@ -27,7 +27,7 @@ CREATE TABLE creditcard_detail (
 );
 
 
--- 2. Create cc_detail table
+-- 2. Create customer_detail table
 
 CREATE TABLE customer_detail (
     Client_Num INT,
@@ -48,7 +48,8 @@ CREATE TABLE customer_detail (
 );
 
 USE creditcard_db;
-DESCRIBE cc_detail;
+DESCRIBE creditcard_detail;
+DESCRIBE customer_detail;
 
 LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/cc_add.csv'
 INTO TABLE creditcard_detail
