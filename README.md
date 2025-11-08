@@ -10,11 +10,7 @@
 
 
 
-**Short description**
-
-This repository contains a Power BI report (`.pbix`) and supporting artifacts for a Credit Card Analytics project. The report analyzes transaction- and customer-level data to surface revenue, interest earned, transaction counts, and behavioral/segment insights (by card category, income group, age group, state, job, education, and transaction type).
-
-> The included Power BI file is `credit card project sql+power bi.pbix` and there are two dashboard screenshots in the repo (used below in the README).
+This repository contains an end-to-end Credit Card Transaction Analytics project built using Power BI and SQL. The project focuses on real-time KPI monitoring, transaction trend analysis, customer behavior insights, and performance optimization.The goal of this project is to analyze large volumes of credit card transaction data and build an interactive, business-ready Power BI dashboard with SQL-powered data cleaning, modeling, and optimization.
 
 ---
 
@@ -30,13 +26,15 @@ This repository contains a Power BI report (`.pbix`) and supporting artifacts fo
 
 ## Project overview & objectives
 
-The report was built to help business stakeholders and analysts answer questions such as:
+Monitor real-time KPIs (revenue, transaction count, fraud indicators, average ticket size).
 
-* What is total revenue, interest earned, and transaction volume by quarter?
-* Which card categories (Blue/Silver/Gold/Platinum) and customer segments drive revenue?
-* How does revenue vary by age group, income group, job type, education, and state?
-* Which transaction channels (Swipe / Chip / Online) drive the most revenue?
+Analyze daily/weekly/monthly trends in transaction volume.
 
+Study customer segments based on spending behavior.
+
+Detect transaction anomalies or unusual spikes.
+
+Track merchant category performance.
 The visual design prioritizes a single-page executive dashboard with supporting visualizations for segmentation analysis and trend analysis.
 
 ---
