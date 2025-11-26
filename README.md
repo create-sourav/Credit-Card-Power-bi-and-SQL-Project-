@@ -72,7 +72,7 @@ Adjust field and table names to match your model.
 
 Key sections shown in the screenshots:
 
-* Top KPI cards: Income, Interest, Revenue, Count/Amount
+* Top KPI cards: Income, Interest, Revenue.
 * Time selector (Week_Start_Date) and quarter/quarter tiles
 * Trend chart: Revenue over time by month/day and by gender
 * Bar charts: Revenue by Age Group, Income Group, Top States, Dependents, Education, Job
